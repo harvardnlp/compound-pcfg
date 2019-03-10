@@ -4,7 +4,7 @@
 The code was tested in `python 3.6` and `pytorch 1.0`. We also require the `nltk` package.
 
 ## Data  
-The datasets can be downloaded [here](https://drive.google.com/file/d/1bG4_ctFcU63j_tUTMrz7udg2tTBft-bh/view?usp=sharing). This contains the train/validation/test sets, as well as the vocabulary used (`ptb.dict`). If you want to create this from scratch, you can run
+The datasets can be downloaded [here](https://drive.google.com/open?id=1KmyP9zYU13wQxPg3MPpv3BPsWLDyLDgg). This contains the train/validation/test sets, as well as the vocabulary used (`ptb.dict`). If you want to create this from scratch, you can run
 ```
 python process_ptb.py --ptb_path PATH-TO-PTB/parsed/mrg/wsj --output_path DATA-FOLDER
 ```
@@ -44,8 +44,8 @@ python parse.py --model_file compound-pcfg.pt --data_file sents-to-be-parsed.txt
 Note that `sents-to-be-parsed.txt` should have one sentence per line, and be preprocessed in a way that roughly matches the processing in `process_ptb.py` (e.g. no punctuation).
 
 ## Parsed Datasets
-We also provide parsed test sets from the compound/neural PCFGs for further analysis. These can be found under the `data/parsed-data` folder when you download the processed datasets from above:  
-- `ptb-test-gold-filtered.txt`: Test set with gold trees with length <= 2 sentences filtered out (this does not affect F1 score since we ignore sentence-level spans for evaluation per convention).  
+We also provide parsed test sets from each run (i.e. different seed) of each model (compound PCFG/neural PCFG/PRPN/Ordered Neurons) for further analysis. These can be found under the `data/parsed-data` folder when you download the processed datasets from above:  
+- `ptb-test-gold-filtered.txt`: Test set with gold trees where sentences that only contain trivial spans are filtered out.  
 - `ptb-test-X-runY.txt`: Test set parsed with model `X` that ranked `Y`-th among four different seeds. For example `ptb-test-compound-pcfg-run3.txt` is the test set parsed with the compound PCFG that performed the third best out of four runs.  
 
 ## Acknowledgements
