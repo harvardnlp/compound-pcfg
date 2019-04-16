@@ -158,7 +158,8 @@ def clean_number(w):
 def get_data(args):
     indexer = Indexer(["<pad>","<unk>","<s>","</s>"])
 
-    def make_vocab(textfile, seqlength, minseqlength, lowercase, train=1, apply_length_filter=1):
+    def make_vocab(textfile, seqlength, minseqlength, lowercase, replace_num,
+                   train=1, apply_length_filter=1):
         num_sents = 0
         max_seqlength = 0
         for tree in open(textfile, 'r'):
@@ -168,7 +169,8 @@ def get_data(args):
             assert(len(tags) == len(sent))
             if lowercase == 1:
                 sent = sent_lower
-            sent = [clean_number(w) for w in sent]
+            if replace_num == 1:
+                sent = [clean_number(w) for w in sent]
             if (len(sent) > seqlength and apply_length_filter == 1) or len(sent) < minseqlength:
                 continue
             num_sents += 1
@@ -178,7 +180,7 @@ def get_data(args):
                     indexer.vocab[word] += 1
         return num_sents, max_seqlength
 
-    def convert(textfile, lowercase, 
+    def convert(textfile, lowercase, replace_num,  
                 batchsize, seqlength, minseqlength, outfile, num_sents, max_sent_l=0,
                 shuffle=0, include_boundary=1, apply_length_filter=1):
         newseqlength = seqlength
@@ -196,8 +198,12 @@ def get_data(args):
             assert(len(tags) == len(sent))
             if lowercase == 1:
                 sent = sent_lower
-            sent_str = " ".join(sent_lower)
-            sent = [clean_number(w) for w in sent]
+            sent_str = " ".join(sent)
+            if replace_num == 1:
+                sent = [clean_number(w) for w in sent]
+            if (len(sent) > seqlength and apply_length_filter == 1) or len(sent) < minseqlength:
+                continue
+
             if include_boundary == 1:
                 sent = [indexer.BOS] + sent + [indexer.EOS]
             max_sent_l = max(len(sent), max_sent_l)
@@ -266,14 +272,14 @@ def get_data(args):
         return max_sent_l
 
     print("First pass through data to get vocab...")
-    num_sents_train, train_seqlength = make_vocab(args.trainfile, args.seqlength, 
-                                                  args.minseqlength, args.lowercase, 1, 1)
+    num_sents_train, train_seqlength = make_vocab(args.trainfile, args.seqlength, args.minseqlength,
+                                                  args.lowercase, args.replace_num, 1, 1)
     print("Number of sentences in training: {}".format(num_sents_train))
     num_sents_valid, valid_seqlength = make_vocab(args.valfile, args.seqlength, args.minseqlength, 
-                                                  args.lowercase, 0, 0)
+                                                  args.lowercase, args.replace_num, 0, 0)
     print("Number of sentences in valid: {}".format(num_sents_valid))
     num_sents_test, test_seqlength = make_vocab(args.testfile, args.seqlength, args.minseqlength, 
-                                                args.lowercase, 0, 0)
+                                                args.lowercase, args.replace_num, 0, 0)
     print("Number of sentences in test: {}".format(num_sents_test))
 
     if args.vocabminfreq >= 0:
@@ -288,15 +294,15 @@ def get_data(args):
                                                           len(indexer.d)))
     print(train_seqlength, valid_seqlength, test_seqlength)
     max_sent_l = 0
-    max_sent_l = convert(args.testfile, args.lowercase, 
+    max_sent_l = convert(args.testfile, args.lowercase, args.replace_num, 
                          args.batchsize, test_seqlength, args.minseqlength, 
                          args.outputfile + "-test.pkl", num_sents_test,
                          max_sent_l, args.shuffle, args.include_boundary, 0)
-    max_sent_l = convert(args.valfile, args.lowercase, 
+    max_sent_l = convert(args.valfile, args.lowercase, args.replace_num, 
                          args.batchsize, valid_seqlength, args.minseqlength, 
                          args.outputfile + "-val.pkl", num_sents_valid,
                          max_sent_l, args.shuffle, args.include_boundary, 0)
-    max_sent_l = convert(args.trainfile, args.lowercase, 
+    max_sent_l = convert(args.trainfile, args.lowercase, args.replace_num, 
                          args.batchsize, args.seqlength,  args.minseqlength,
                          args.outputfile + "-train.pkl", num_sents_train,
                          max_sent_l, args.shuffle, args.include_boundary, 1)
@@ -310,15 +316,15 @@ def main(arguments):
                                                 "by taking the top X most frequent words. "
                                                 " Rest are replaced with special UNK tokens.",
                                                 type=int, default=10000)
-    parser.add_argument('--vocabminfreq', help="Minimum frequency for vocab",
+    parser.add_argument('--vocabminfreq', help="Minimum frequency for vocab. Use this instead of "
+                                                "vocabsize if > 0",
                                                 type=int, default=-1)
     parser.add_argument('--include_boundary', help="Add BOS/EOS tokens", type=int, default=1)        
     parser.add_argument('--lowercase', help="Lower case", type=int, default=1)        
-    parser.add_argument('--trainfile', help="Path to source training data, "
-                                           "where each line represents a single "
-                                           "source/target sequence.", required=True)
-    parser.add_argument('--valfile', help="Path to source validation data.", required=True)
-    parser.add_argument('--testfile', help="Path to source validation data.", required=True)
+    parser.add_argument('--replace_num', help="Replace numbers with N", type=int, default=1)        
+    parser.add_argument('--trainfile', help="Path to training data.", required=True)
+    parser.add_argument('--valfile', help="Path to validation data.", required=True)
+    parser.add_argument('--testfile', help="Path to test validation data.", required=True)
     parser.add_argument('--batchsize', help="Size of each minibatch.", type=int, default=4)
     parser.add_argument('--seqlength', help="Maximum sequence length. Sequences longer "
                                                "than this are dropped.", type=int, default=150)

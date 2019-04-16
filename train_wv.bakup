@@ -15,15 +15,17 @@ import time
 import logging
 from data import Dataset
 from utils import *
-from models import CompPCFG
+from models2 import CompPCFG
 from torch.nn.init import xavier_uniform_
+import pickle
 
 parser = argparse.ArgumentParser()
 
 # Data path options
-parser.add_argument('--train_file', default='data/ptb-train.pkl')
-parser.add_argument('--val_file', default='data/ptb-val.pkl')
+parser.add_argument('--train_file', default='data/ptb-10k-train.pkl')
+parser.add_argument('--val_file', default='data/ptb-10k-val.pkl')
 parser.add_argument('--save_path', default='compound-pcfg.pt', help='where to save the model')
+parser.add_argument('--wv_path', default='data/ptb-10k-elmo-emb.pkl', help='elmo embedding path')
 
 # Model options
 # Generative model parameters
@@ -31,10 +33,13 @@ parser.add_argument('--z_dim', default=64, type=int, help='latent dimension')
 parser.add_argument('--t_states', default=60, type=int, help='number of preterminal states')
 parser.add_argument('--nt_states', default=30, type=int, help='number of nonterminal states')
 parser.add_argument('--state_dim', default=256, type=int, help='symbol embedding dimension')
+parser.add_argument('--word_dim', default=1024, type=int, help='word embedding dimension')
 # Inference network parameters
 parser.add_argument('--h_dim', default=512, type=int, help='hidden dim for variational LSTM')
-parser.add_argument('--w_dim', default=512, type=int, help='embedding dim for variational LSTM')
+parser.add_argument('--w_dim', default=1024, type=int, help='embedding dim for variational LSTM')
 # Optimization options
+parser.add_argument('--finetune_wv', default=0, type=int, help='if using elmo emb, whether to finetune')
+parser.add_argument('--svd', default=0, type=int, help='use svd on wv')
 parser.add_argument('--num_epochs', default=10, type=int, help='number of training epochs')
 parser.add_argument('--lr', default=0.001, type=float, help='starting learning rate')
 parser.add_argument('--max_grad_norm', default=3, type=float, help='gradient clipping parameter')
@@ -62,6 +67,7 @@ def main(args):
   cuda.set_device(args.gpu)
   model = CompPCFG(vocab = vocab_size,
                    state_dim = args.state_dim,
+                   word_dim = args.word_dim,
                    t_states = args.t_states,
                    nt_states = args.nt_states,
                    h_dim = args.h_dim,
@@ -74,7 +80,28 @@ def main(args):
   print(model)
   model.train()
   model.cuda()
-  optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, betas = (args.beta1, args.beta2))
+  if len(args.wv_path) > 0:    
+    print("loading pretrained word vectors")
+    word_vecs = pickle.load(open(args.wv_path, "rb"))
+    word_vecs = torch.from_numpy(word_vecs)#*0.1
+    word_vecs.div_(((word_vecs ** 2).sum(1)**0.5).unsqueeze(1)) 
+    # U, S, V = torch.svd(word_vecs)
+    # word_vecs_gen = torch.mm(torch.mm(U[:, :args.state_dim], torch.diag(S[:args.state_dim])),
+    #                          V.t()[:args.state_dim, :args.state_dim])
+    # print(word_vecs_gen.size())
+    model.vocab_mlp[-1].weight.data.copy_(word_vecs)
+    if args.z_dim > 0:
+      # word_vecs_gen = torch.mm(torch.mm(U[:, :args.w_dim], torch.diag(S[:args.w_dim])),
+      #                          V.t()[:args.w_dim, :args.w_dim])
+      model.enc_emb.weight.data.copy_(word_vecs)
+    model_params = []
+    for p in model.parameters():
+      if p.size(0) == vocab_size and p.dim() > 1 and args.finetune_wv == 0:
+        continue
+      model_params.append(p)
+  else:
+    model_params = list(model.parameters())
+  optimizer = torch.optim.Adam(model_params, lr=args.lr, betas = (args.beta1, args.beta2))
   best_val_ppl = 1e5
   best_val_f1 = 0
   epoch = 0
