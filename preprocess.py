@@ -338,7 +338,7 @@ def main(arguments):
                                           type = str, default='')
     parser.add_argument('--shuffle', help="If = 1, shuffle sentences before sorting (based on  "
                                            "source length).",
-                                          type = int, default = 1)
+                                          type = int, default = 0)
     args = parser.parse_args(arguments)
     np.random.seed(3435)
     get_data(args)

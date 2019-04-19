@@ -44,7 +44,7 @@ parser.add_argument('--final_max_length', default=40, type=int, help='final max 
 parser.add_argument('--beta1', default=0.75, type=float, help='beta1 for adam')
 parser.add_argument('--beta2', default=0.999, type=float, help='beta2 for adam')
 parser.add_argument('--gpu', default=0, type=int, help='which gpu to use')
-parser.add_argument('--seed', default=17, type=int, help='random seed')
+parser.add_argument('--seed', default=3435, type=int, help='random seed')
 parser.add_argument('--print_every', type=int, default=1000, help='print stats after N batches')
 
 def main(args):
@@ -161,7 +161,7 @@ def eval(data, model):
       sents = sents.cuda()
       # note that for unsuperised parsing, we should do model(sents, argmax=True, use_mean = True)
       # but we don't for eval since we want a valid upper bound on PPL for early stopping
-      # see eval.py
+      # see eval.py for proper MAP inference
       nll, kl, binary_matrix, argmax_spans = model(sents, argmax=True)
       total_nll += nll.sum().item()
       total_kl  += kl.sum().item()
