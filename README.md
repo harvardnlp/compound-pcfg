@@ -1,10 +1,11 @@
 # Compound Probabilistic Context-Free Grammars
 
 ## Dependencies
-The code was tested in `python 3.6` and `pytorch 1.0`. We also require the `nltk` package.
+The code was tested in `python 3.6` and `pytorch 1.0`. We also require the `nltk` package if creating
+the processed data from the raw PTB dataset.
 
 ## Data  
-The datasets can be downloaded [here](https://drive.google.com/open?id=1KmyP9zYU13wQxPg3MPpv3BPsWLDyLDgg). This contains the train/validation/test sets, as well as the vocabulary used (`ptb.dict`). If you want to create this from scratch, you can run
+The processed datasets can be downloaded [here](https://drive.google.com/file/d/1m4ssitfkWcDSxAE6UYidrP6TlUctSG2D/view?usp=sharing). This contains the train/validation/test sets, as well as the vocabulary used (`ptb.dict`). If you want to create this from scratch, you can run
 ```
 python process_ptb.py --ptb_path PATH-TO-PTB/parsed/mrg/wsj --output_path DATA-FOLDER
 ```
@@ -54,7 +55,8 @@ python compare_trees.py --tree1 data/parsed-data/ptb-test-gold-filtered.txt
 --tree2 data/parsed-data/ptb-test-compound-pcfg.txt
 ```
 
-Note: To be comparable to the numbers reported in PRPN/Ordered Neurons papers, 
+### Note regarding F1 calculation
+To be comparable to the numbers reported in PRPN/Ordered Neurons papers, 
 we use the original sentence F1 evaluation code based on 
 L83-89 of the [PRPN repo](https://github.com/yikangshen/PRPN/blob/master/test_phrase_grammar.py).
 This has quirky behavior in corner cases where the gold tree is over a sentence of length > 2 
@@ -64,8 +66,8 @@ However, it should arguably be zero since in such a case, precision = recall = 0
 Corpus F1 does not have this issue.
 
 ## Pretrained models
-We provide the best pretrained neural/compound PCFG models under `data/trained-model`. These can
-be used for `eval.py` or `parse.py`.
+We provide the best pretrained neural/compound PCFG models along with the preprocessed datasets
+under the `data/trained-model` folder. These can be used for `eval.py` or `parse.py`.
 
 ## Parsed Datasets
 We also provide parsed train/val/test sets for the best run of each model for further analysis and
