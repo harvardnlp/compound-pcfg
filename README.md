@@ -1,4 +1,8 @@
 # Compound Probabilistic Context-Free Grammars
+Code for the paper:  
+[Compound Probabilistic Context-Free Grammars for Grammar Induction](https://arxiv.org/abs/)  
+Yoon Kim, Chris Dyer, Alexander Rush  
+ACL 2019  
 
 ## Dependencies
 The code was tested in `python 3.6` and `pytorch 1.0`. We also require the `nltk` package if creating

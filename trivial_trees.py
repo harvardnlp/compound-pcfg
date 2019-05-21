@@ -111,13 +111,18 @@ def main(args):
       tree1 = tree1.strip()
       action1 = get_actions(tree1)
       tags1, sent1, sent_lower1 = get_tags_tokens_lowercase(tree1)
-      if len(sent1) > args.length_cutoff or len(sent1) == 1:
+      if len(sent1) > args.length_cutoff > 0:
           continue
       gold_span1, binary_actions1, nonbinary_actions1 = get_nonbinary_spans(action1)
       tree2 = tree2.strip()
       action2 = get_actions(tree2)
       tags2, sent2, sent_lower2 = get_tags_tokens_lowercase(tree2)
       gold_span2, binary_actions2, nonbinary_actions2 = get_nonbinary_spans(action2)
+      pred_span_list = [(l-1, len(sent1)-1) for l in range(1, len(sent1)) ]
+      # print(gold_span2)
+      # print(pred_span_list)
+      gold_span2 = pred_span_list[::-1]
+      
       pred_span_set = set(gold_span2[:-1]) #the last span in the list is always the
       gold_span_set = set(gold_span1[:-1]) #trival sent-level span so we ignore it
       tp, fp, fn = get_stats(pred_span_set, gold_span_set) 

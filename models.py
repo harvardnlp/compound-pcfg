@@ -110,4 +110,3 @@ class CompPCFG(nn.Module):
       return -log_Z, kl, binary_matrix, spans
     else:
       return -log_Z, kl
-

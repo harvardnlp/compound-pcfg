@@ -328,3 +328,18 @@ def get_nonbinary_spans_label(actions, SHIFT = 0, REDUCE = 1):
   assert(len(stack) == 1)
   assert(num_shift == num_reduce + 1)
   return spans, binary_actions
+
+def prpn_decoding_bias(n, samples = 1000):
+  bias = torch.zeros(samples, n, n).fill_(1e-8)
+  sen = list(range(n))
+  for s in range(samples):
+    parse_tree = build_tree(np.random.permutation(n), sen)
+    actions = get_actions(str(parse_tree), OPEN = "[", CLOSE = "]")
+    spans = get_spans(actions)
+    for span in spans:
+      bias[s][span[0]][span[1]] = 1
+  bias = bias.mean(0)
+  for i in range(n):
+    bias[i][i] = 1.
+  return bias.log().detach()
+  
