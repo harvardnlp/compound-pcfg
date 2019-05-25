@@ -70,8 +70,7 @@ However, it should arguably be zero since in such a case, precision = recall = 0
 Corpus F1 does not have this issue.
 
 ## Pretrained models
-We provide the best pretrained neural/compound PCFG models along with the preprocessed datasets
-under the `data/trained-model` folder. These can be used for `eval.py` or `parse.py`.
+We provide the best pretrained neural/compound PCFG models, under the `data/trained-model` folder. These can be used for `eval.py` or `parse.py`.
 
 ## Parsed Datasets
 We also provide parsed train/val/test sets for the best run of each model for further analysis and
@@ -83,7 +82,8 @@ an RNNG trained on compound PCFG trees then fine-tuned with the URNNG objective.
 
 ## Training Recurrent Neural Network Grammars (RNNG) on Induced Trees
 Training the RNNG on induced trees and fine-tuning with the Unsupervised RNNG uses code from
-[Unsupervised Recurrent Neural Network Grammars](https://github.com/harvardnlp/urnng)  
+[Unsupervised Recurrent Neural Network Grammars](https://github.com/harvardnlp/urnng). The below commands should be
+run from the `urnng` folder.
 
 First preprocess the training set with induced trees, for example with the compound PCFG:
 ```
@@ -104,7 +104,7 @@ python train.py --train_file /compound-pcfg/data/ptb-comp-pcfg-train.pkl
 --mode supervised --train_q_epochs 18 --count_eos_ppl 1 --gpu 0
 ```
 For this version of PTB we count the `</s>` token in PPL calculations, hence 
-the use of `---count_eos_ppl 1`. Note that this only affects evaluation and not training.
+the use of `--count_eos_ppl 1`. Note that this only affects evaluation and not training.
 
 For fine-tuning:
 ```
