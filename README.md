@@ -79,6 +79,19 @@ RNNG training. These can be found under the `data/parsed-data` folder when you d
 - `ptb-test-{neural-pcfg/compound-pcfg/prpn/on}-{rnng/urnng}.txt`: Predicted trees for the test only for RNNG and URNNG (i.e. train on induced trees with RNNG, then fine-tune with URNNG objective). For example `ptb-test-compound-pcfg-urnng.txt` contains the predicted trees from an
 an RNNG trained on compound PCFG trees then fine-tuned with the URNNG objective.
 
+### Results
+Here are the sentence-level F1 numbers on the PTB test set for the models that performed best on the validation set . 
+`+Induced URNNG` indicates training an RNNG on the induced trees and then fine-tuning with the URNNG objective (see below).
+This gave improvements across the board.
+
+| Model          | F1          | F1 with Induced URNNG |
+|----------------|-------------|-----------------------|
+| PRPN           | 47.9        | 51.5                  |
+| Ordered Neurons| 50.0        | 55.1                  |
+| Neural PCFG    | 52.6        | 58.7                  |
+| Compound PCFG  | 60.1        | 66.9                  |
+
+
 ## Training Recurrent Neural Network Grammars (RNNG) on Induced Trees
 Training the RNNG on induced trees and fine-tuning with the Unsupervised RNNG uses code from
 [Unsupervised Recurrent Neural Network Grammars](https://github.com/harvardnlp/urnng). The below commands should be
