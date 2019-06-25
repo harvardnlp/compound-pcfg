@@ -81,7 +81,7 @@ an RNNG trained on compound PCFG trees then fine-tuned with the URNNG objective.
 
 ### Results
 Here are the sentence-level F1 numbers on the PTB test set for the models that performed best on the validation set . 
-`+Induced URNNG` indicates training an RNNG on the induced trees and then fine-tuning with the URNNG objective (see below).
+`F1 with Induced URNNG` indicates training an RNNG on the induced trees and then fine-tuning with the URNNG objective (see below).
 This gave improvements across the board.
 
 | Model          | F1          | F1 with Induced URNNG |
