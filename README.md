@@ -9,7 +9,7 @@ The code was tested in `python 3.6` and `pytorch 1.0`. We also require the `nltk
 the processed data from the raw PTB dataset.
 
 ## Data  
-The processed datasets can be downloaded [here](https://drive.google.com/file/d/1m4ssitfkWcDSxAE6UYidrP6TlUctSG2D/view?usp=sharing). This contains the train/validation/test sets, as well as the vocabulary used (`ptb.dict`). If you want to create this from scratch, you can run
+The processed datasets, as well as pretrained models and parsed datasets, can be downloaded [here](https://drive.google.com/file/d/1m4ssitfkWcDSxAE6UYidrP6TlUctSG2D/view?usp=sharing). This contains the train/validation/test sets, as well as the vocabulary used (`ptb.dict`). If you want to create this from scratch, you can run
 ```
 python process_ptb.py --ptb_path PATH-TO-PTB/parsed/mrg/wsj --output_path DATA-FOLDER
 ```
