@@ -66,7 +66,6 @@ L83-89 of the [PRPN repo](https://github.com/yikangshen/PRPN/blob/master/test_ph
 This has quirky behavior in corner cases where the gold tree is over a sentence of length > 2 
 but only has the sentence-level trivial span. 
 In this case the sentence F1 for that example could be potentially nonzero according to the code. 
-However, it should arguably be zero since in such a case, precision = recall = 0. 
 Corpus F1 does not have this issue.
 
 ## Pretrained models
