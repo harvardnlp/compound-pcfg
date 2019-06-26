@@ -4,14 +4,14 @@ Code for the paper:
 Yoon Kim, Chris Dyer, Alexander Rush  
 ACL 2019  
 
-The preprocessed datasets, pretrained models, and the datasets parsed with the trained models can be found [here](https://drive.google.com/file/d/1m4ssitfkWcDSxAE6UYidrP6TlUctSG2D/view?usp=sharing).
+The preprocessed datasets, trained models, and the datasets parsed with the trained models can be found [here](https://drive.google.com/file/d/1m4ssitfkWcDSxAE6UYidrP6TlUctSG2D/view?usp=sharing).
 
 ## Dependencies
 The code was tested in `python 3.6` and `pytorch 1.0`. We also require the `nltk` package if creating
 the processed data from the raw PTB dataset.
 
 ## Data  
-The processed datasets, as well as pretrained models and parsed datasets, can be downloaded at the above link. This contains the train/validation/test sets, as well as the vocabulary used (`ptb.dict`). If you want to create this from scratch, you can run
+The processed version of PTB can be downloaded at the above link. This contains the train/validation/test sets, as well as the vocabulary used (`ptb.dict`). If you want to create this from scratch, you can run
 ```
 python process_ptb.py --ptb_path PATH-TO-PTB/parsed/mrg/wsj --output_path DATA-FOLDER
 ```
@@ -70,8 +70,8 @@ but only has the sentence-level trivial span.
 In this case the sentence F1 for that example could be potentially nonzero according to the code. 
 Corpus F1 does not have this issue.
 
-## Pretrained models
-We provide the best pretrained neural/compound PCFG models, under the `data/trained-model` folder. These can be used for `eval.py` or `parse.py`.
+## Trained models
+We provide the best neural/compound PCFG models, under the `data/trained-model` folder. These can be used for `eval.py` or `parse.py`.
 
 ## Parsed Datasets
 We also provide parsed train/val/test sets for the best run of each model for further analysis and
