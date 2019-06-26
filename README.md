@@ -1,6 +1,6 @@
 # Compound Probabilistic Context-Free Grammars
 Code for the paper:  
-[Compound Probabilistic Context-Free Grammars for Grammar Induction](https://arxiv.org/abs/)  
+[Compound Probabilistic Context-Free Grammars for Grammar Induction](https://arxiv.org/abs/1906.10225)  
 Yoon Kim, Chris Dyer, Alexander Rush  
 ACL 2019  
 
