@@ -127,7 +127,7 @@ def main(args):
         print("Pred Tree: %s" % get_tree(action, sent_str))
         print("Gold Tree: %s" % get_tree(gold_binary_trees[0], sent_str))
 
-    args.max_length = max(args.final_max_length, args.max_length + args.len_incr)
+    args.max_length = min(args.final_max_length, args.max_length + args.len_incr)
     print('--------------------------------')
     print('Checking validation perf...')    
     val_ppl, val_f1 = eval(val_data, model)
