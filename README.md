@@ -139,12 +139,16 @@ For parsing F1:
 python parse.py --model_file compound-pcfg-urnng.pt --data_file /compound-pcfg/data/ptb-test.txt 
 --out_file pred-parse.txt --gold_out_file gold-parse.txt --gpu 0 --lowercase 1 --replace_num 1
 ```
+## Miscellaneous Stuff
+- LSTM LM training in Table 3 uses code/hyperparameters from [here](https://github.com/harvardnlp/urnng/blob/master/train_lm.py). 
+- For Table 3, LSTM/RNNG is trained with SGD, while PRPN/ON is trained with Adam. However, it seems like models trained with ASGD, as in the AWD-LSTM (https://github.com/salesforce/awd-lstm-lm), do quite a bit better in terms of perplexity. Thanks to [Freda](https://github.com/ExplorerFreda) for pointing this out!
 
 ## Acknowledgements
 Much of our preprocessing and evaluation code is based on the following repositories:  
 - [Recurrent Neural Network Grammars](https://github.com/clab/rnng)  
 - [Parsing Reading Predict Network](https://github.com/yikangshen/PRPN)  
 - [Ordered Neurons](https://github.com/yikangshen/Ordered-Neurons)  
+
 
 ## License
 MIT
