@@ -67,8 +67,8 @@ class PCFG(nn.Module):
         tmp_u = torch.cat(tmp_u, 2)
         tmp_u = self.logsumexp(tmp_u, 2)
         self.beta[:, s, t, :self.nt_states] = tmp_u[:, :self.nt_states]
-      log_Z = self.beta[:, 0, n-1, :self.nt_states] + root_scores
-      log_Z = self.logsumexp(log_Z, 1)
+    log_Z = self.beta[:, 0, n-1, :self.nt_states] + root_scores
+    log_Z = self.logsumexp(log_Z, 1)
     return log_Z
 
   def _viterbi(self, unary_scores, rule_scores, root_scores):
