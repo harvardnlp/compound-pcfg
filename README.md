@@ -143,6 +143,7 @@ python parse.py --model_file compound-pcfg-urnng.pt --data_file /compound-pcfg/d
 - LSTM LM training in Table 3 uses code/hyperparameters from [here](https://github.com/harvardnlp/urnng/blob/master/train_lm.py). 
 - For Table 3, LSTM/RNNG is trained with SGD, while PRPN/ON is trained with Adam. However, it seems like models trained with ASGD, as in the [AWD-LSTM](https://github.com/salesforce/awd-lstm-lm), do quite a bit better in terms of perplexity. Thanks to [Freda](https://github.com/ExplorerFreda) for pointing this out!
 - Curriculum learning based on length does not always seem to help, and in subsequent experiments I am seeing similar results without it. For example, one could use `--max_length 45 --final_max_length 45` to train on all sentences of length up to 45 from the first epoch (limit on 45 is due to memory reasons).
+- Yanpeng has a much faster implementation of compound PCFGs utilizing the [pytorch-struct](https://github.com/harvardnlp/pytorch-struct) library. Check it out [here](https://github.com/zhaoyanpeng/cpcfg)!
 
 ## Acknowledgements
 Much of our preprocessing and evaluation code is based on the following repositories:  
