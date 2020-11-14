@@ -124,7 +124,12 @@ def main(args):
       corpus_f1[0] += tp
       corpus_f1[1] += fp
       corpus_f1[2] += fn
-      # sent-level F1 is based on L83-89 from https://github.com/yikangshen/PRPN/test_phrase_grammar.py
+      # Sentence-level F1 is based on the original code from PRPN, i.e.
+      # L83-89 from https://github.com/yikangshen/PRPN/test_phrase_grammar.py
+      # As pointed out in the README, this code isn't entirely correct since sentence-level F1 could be
+      # nonzero for short sentences with only a single sentence-level span. 
+      # In practice this discrepancy has minimal impact on the final results, but should ideally be
+      # fixed nonetheless.
       overlap = pred_span_set.intersection(gold_span_set)
       prec = float(len(overlap)) / (len(pred_span_set) + 1e-8)
       reca = float(len(overlap)) / (len(gold_span_set) + 1e-8)
