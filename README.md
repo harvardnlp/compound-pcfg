@@ -125,7 +125,7 @@ For fine-tuning:
 python train.py --train_from compound-pcfg-rnng.pt --save_path compound-pcfg-urnng.pt
 --train_file /compound-pcfg/data/ptb-comp-pcfg-train.pkl 
 --val_file /compound-pcfg/data/ptb-comp-pcfg-val.pkl
---mode unsupervised --train_q_epochs 10 --epochs 10 --count_eos_ppl 1 --lr 0.1 --gpu 0 --kl_warmup 0
+--mode unsupervised --train_q_epochs 10 --num_epochs 10 --count_eos_ppl 1 --lr 0.1 --gpu 0 --kl_warmup 0
 ```
 
 For evaluation:
